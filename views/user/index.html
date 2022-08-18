@@ -91,6 +91,9 @@
                 <form class="d-none d-md-flex ms-4">
                     <input class="form-control border-0" type="search" placeholder="Search">
                 </form>
+                <form class="d-none d-md-flex ms-4">
+                    <div id="ViewTime"></div>
+                </form>
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
                         <a href="../auth/signin.html" class="nav-link dropdown-toggle">
@@ -253,5 +256,16 @@
     <!-- Template Javascript -->
     <script src="../../public/js/main.js"></script>
 </body>
+<script src="../.././public/lib1/moment.min.js"></script>
+<script>
+    $(function () {
+        showTime();
+    })
 
+    function showTime() {
+        let time = moment().format('DD/MM/YYYY, h:mm A');
+        let html = `<span>${time}</span>`
+        $('#ViewTime').html(html);
+    }
+</script>
 </html>
