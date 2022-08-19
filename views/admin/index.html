@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Admin - Quản Lý Tài Chính</title>
+    <title>Admin</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -43,28 +43,11 @@
 
 
         <!-- Sidebar Start -->
-        <div class="sidebar pe-4 pb-3">
+        <div class="sidebar pe-4 pb-3" >
             <nav class="navbar bg-light navbar-light">
                 <a href="../user/index.html" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary">Admin</h3>
+                    <h3 class="text-primary">DuyDB</h3>
                 </a>
-                <div class="d-flex align-items-center ms-4 mb-4">
-                    <div class="position-relative">
-                        <img class="rounded-circle" src="../../public/img/anh-dong.jpg" alt="" style="width: 40px; height: 40px;">
-                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
-                    </div>
-                    <div class="ms-3">
-                        <h6 class="mb-0">Nghiêm Đông</h6>
-                        <span>Admin</span>
-                    </div>
-                </div>
-                <div class="navbar-nav w-100">
-                    <a href="../user/index.html" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <a href="../../../../../dashmin-1.0.0/widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
-                    <a href="../../../../../dashmin-1.0.0/form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
-                    <a href="index.html" class="nav-item nav-link active"><i class="fa fa-table me-2"></i>Tables</a>
-                    <a href="../../../../../dashmin-1.0.0/chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
-                </div>
             </nav>
         </div>
         <!-- Sidebar End -->
@@ -85,23 +68,12 @@
                 </form>
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
-                        <a href="../auth/signin.html" class="nav-link dropdown-toggle">
-                            <span class="d-none d-lg-inline-flex">Đăng Nhập</span>
-                        </a>
-                    </div>
-                    <div class="nav-item dropdown">
-                        <a href="../auth/signup.html" class="nav-link dropdown-toggle">
-                            <span class="d-none d-lg-inline-flex">Đăng Ký</span>
-                        </a>
-                    </div>
-                    <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="../../public/img/anh-dong.jpg" alt="" style="width: 40px; height: 40px;">
+                            
                             <span class="d-none d-lg-inline-flex">Nghiêm Đông</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
-                            <a href="#" class="dropdown-item">Settings</a>
                             <a href="#" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
@@ -119,42 +91,14 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">First Name</th>
-                                            <th scope="col">Last Name</th>
-                                            <th scope="col">Email</th>
-                                            <th scope="col">Country</th>
-                                            <th scope="col">ZIP</th>
-                                            <th scope="col">Status</th>
+                                            <th scope="col">Username</th>
+                                            <th scope="col">Password</th>
+                                            <th scope="col">Role</th>
+                                            <th scope="col" colspan="2"></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>John</td>
-                                            <td>Doe</td>
-                                            <td>jhon@email.com</td>
-                                            <td>USA</td>
-                                            <td>123</td>
-                                            <td>Member</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>mark@email.com</td>
-                                            <td>UK</td>
-                                            <td>456</td>
-                                            <td>Member</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Jacob</td>
-                                            <td>Thornton</td>
-                                            <td>jacob@email.com</td>
-                                            <td>AU</td>
-                                            <td>789</td>
-                                            <td>Member</td>
-                                        </tr>
+                                    <tbody id="user-list">
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -182,6 +126,42 @@
 
     <!-- Template Javascript -->
     <script src="../../public/js/main.js"></script>
+    <script>
+        const API_URL = 'http://localhost:3000';
+        let token = JSON.parse(localStorage.getItem('accessToken'));
+        if (!token){
+            location.href = '../auth/signin.html'
+        }else if(token.role !== "admin") {
+            location.href = '../user/index.html'
+        } else {
+            $(function () {
+                showUserList();
+            })
+        }
+        function showUserList(){
+            $.ajax({
+                type: "GET",
+                url: `${API_URL}/users`,
+                headers: {
+                    "Authorization": "Bearer "+token.token , 
+                    "Content-Type": "Application/json"
+                },
+                success: function(data){
+                    let html = '';
+                    for(let i = 0; i < data.length; i++){
+                        html += `<tr id="${data[i]._id}">
+                                    <th scope="row">${i+1}</th>
+                                    <td>${data[i].username}</td>
+                                    <td>${data[i].password}</td>
+                                    <td>${data[i].role}</td>
+                                    <td><button class="btn btn-sm btn-primary" onclick="detail("${data[i]._id}")">Detail</button></td>
+                                </tr>`;
+                    }
+                    $("#user-list").html(html);
+                }
+            })
+        }
+    </script>
 </body>
 
 </html>
