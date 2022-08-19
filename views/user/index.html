@@ -96,16 +96,6 @@
                 </form>
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
-                        <a href="../auth/signin.html" class="nav-link dropdown-toggle">
-                            <span class="d-none d-lg-inline-flex">Đăng Nhập</span>
-                        </a>
-                    </div>
-                    <div class="nav-item dropdown">
-                        <a href="../auth/signup.html" class="nav-link dropdown-toggle">
-                            <span class="d-none d-lg-inline-flex">Đăng Ký</span>
-                        </a>
-                    </div>
-                    <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" src="../../public/img/ong-chau-duy.png" alt="" style="width: 40px; height: 40px;">
                             <span class="d-none d-lg-inline-flex">Duy</span>
@@ -212,6 +202,7 @@
 </body>
 <script src="../.././public/lib1/moment.min.js"></script>
 <script>
+
     const API_URL = 'http://localhost:3000';
     let token = JSON.parse(localStorage.getItem('accessToken'));
     if (!token) {
@@ -263,5 +254,14 @@
         
     }
 
+    $(function () {
+        showTime();
+    })
+
+    function showTime() {
+        let time = moment().format('DD/MM/YYYY, h:mm A');
+        let html = `<span>${time}</span>`
+        $('#ViewTime').html(html);
+    }
 </script>
 </html>
