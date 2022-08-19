@@ -59,15 +59,15 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <div class="nav-item dropdown">
+                    <a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Wallet</a>
+                    <!-- <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="button.html" class="dropdown-item">Buttons</a>
                             <a href="typography.html" class="dropdown-item">Typography</a>
                             <a href="../../../../../dashmin-1.0.0/element.html" class="dropdown-item">Other Elements</a>
                         </div>
-                    </div>
+                    </div> -->
                     <a href="../../../../../dashmin-1.0.0/widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
                     <a href="../../../../../dashmin-1.0.0/form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
                     <a href="../../../../../dashmin-1.0.0/table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
@@ -90,6 +90,9 @@
                 </a>
                 <form class="d-none d-md-flex ms-4">
                     <input class="form-control border-0" type="search" placeholder="Search">
+                </form>
+                <form class="d-none d-md-flex ms-4">
+                    <div id="ViewTime"></div>
                 </form>
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
@@ -119,7 +122,7 @@
 
 
             <!-- Sale & Revenue Start -->
-            <div class="container-fluid pt-4 px-4">
+            <!-- <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
                     <div class="col-sm-6 col-xl-3">
                         <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
@@ -158,75 +161,29 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- Sale & Revenue End -->
 
             <!-- Recent Sales Start -->
             <div class="container-fluid pt-4 px-4">
                 <div class="bg-light text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h6 class="mb-0">Recent Salse</h6>
+                        <h6 class="mb-0">Wallet List</h6>
                         <a href="">Show All</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table text-start align-middle table-bordered table-hover mb-0">
                             <thead>
                                 <tr class="text-dark">
-                                    <th scope="col"><input class="form-check-input" type="checkbox"></th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Invoice</th>
-                                    <th scope="col">Customer</th>
-                                    <th scope="col">Amount</th>
-                                    <th scope="col">Status</th>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Icon</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Total Money</th>
+                                    <th scope="col">Current Money</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
+                            <tbody id="wallet-list">
                             </tbody>
                         </table>
                     </div>
@@ -253,5 +210,58 @@
     <!-- Template Javascript -->
     <script src="../../public/js/main.js"></script>
 </body>
+<script src="../.././public/lib1/moment.min.js"></script>
+<script>
+    const API_URL = 'http://localhost:3000';
+    let token = JSON.parse(localStorage.getItem('accessToken'));
+    if (!token) {
+        location.href = '../auth/signin.html'
+    }else{
+        $(function () {
+            showWalletList();
+        })
+    }
+    
+    function showWalletList(){
+        // $.ajax({
+        //     type: 'GET',
+        //     headers: {
+        //         'Authorization': 'Bearer ' + token.token
+        //     },
+        //     url: `${API_URL}/transaction`,
+        //     success: function(transaction){
+        //         for(let i = 0; i < transaction.length;i++){
+                    
+        //         }
+        //     }
+        // })
+        $.ajax({
+        type: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token.token
+        },
+        url: `${API_URL}/wallets`,
+        success: function (data) {
+            let html = '';
+            let currentMoney = 0;
+            for (let i = 0; i < data.length; i++) {
+                currentMoney += data[i].totalMoney;
+                html += `<tr id=${data[i]._id}>
+                            <td>${i+1}</td>
+                            <td><image href="${API_URL}/${data[i].icon}"></td>
+                            <td>${data[i].name}</td>
+                            <td>${data[i].totalMoney}</td>
+                            <td>${currentMoney}</td>
+                            <td><button class="btn btn-sm btn-primary" onclick="detail("${data[i]._id}")">Detail</button></td>
+                        </tr>`
+                    }
+                    $('#wallet-list').html(html);
+        }
+        })
+    }
+    function detail(id){
+        
+    }
 
+</script>
 </html>
