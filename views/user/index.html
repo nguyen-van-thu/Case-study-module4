@@ -46,32 +46,15 @@
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-light navbar-light">
                 <a href="index.html" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary">Thành Viên</h3>
+                    <h3 class="text-primary">Home page</h3>
                 </a>
-                <div class="d-flex align-items-center ms-4 mb-4">
-                    <div class="position-relative">
-                        <img class="rounded-circle" src="../../public/img/ong-chau-duy.png" alt="" style="width: 40px; height: 40px;">
-                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
-                    </div>
-                    <div class="ms-3">
-                        <h6 class="mb-0">Duy</h6>
-                        <span>Thành viên</span>
-                    </div>
-                </div>
+                
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Wallet</a>
-                    <!-- <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="button.html" class="dropdown-item">Buttons</a>
-                            <a href="typography.html" class="dropdown-item">Typography</a>
-                            <a href="../../../../../dashmin-1.0.0/element.html" class="dropdown-item">Other Elements</a>
-                        </div>
-                    </div> -->
-                    <a href="../../../../../dashmin-1.0.0/widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
-                    <a href="../../../../../dashmin-1.0.0/form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
+                    <button onclick="showWallet()" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Wallet</button>
+                    <button  onclick="showCategories()" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Category</button>
+                    <!-- <button  class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</button>
                     <a href="../../../../../dashmin-1.0.0/table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
-                    <a href="../../../../../dashmin-1.0.0/chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
+                    <a href="../../../../../dashmin-1.0.0/chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a> -->
                 </div>
             </nav>
         </div>
@@ -103,7 +86,7 @@
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
                             <a href="#" class="dropdown-item">Settings</a>
-                            <a href="#" class="dropdown-item">Log Out</a>
+                            <a href="../auth/signin.html" class="dropdown-item" onclick="logOut()">Log Out</a>
                         </div>
                     </div>
                 </div>
@@ -112,7 +95,7 @@
 
 
             <!-- Sale & Revenue Start -->
-            <!-- <div class="container-fluid pt-4 px-4">
+            <div class="container-fluid pt-4 px-4" id="container-fluid-user">
                 <div class="row g-4">
                     <div class="col-sm-6 col-xl-3">
                         <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
@@ -151,29 +134,20 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
             <!-- Sale & Revenue End -->
 
             <!-- Recent Sales Start -->
             <div class="container-fluid pt-4 px-4">
                 <div class="bg-light text-center rounded p-4">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h6 class="mb-0">Wallet List</h6>
-                        <a href="">Show All</a>
+                    <div id="header-table" class="d-flex align-items-center justify-content-between mb-4">
+                        
                     </div>
                     <div class="table-responsive">
                         <table class="table text-start align-middle table-bordered table-hover mb-0">
-                            <thead>
-                                <tr class="text-dark">
-                                    <th scope="col">#</th>
-                                    <th scope="col">Icon</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Total Money</th>
-                                    <th scope="col">Current Money</th>
-                                    <th scope="col">Action</th>
-                                </tr>
+                            <thead id="thead-list">
                             </thead>
-                            <tbody id="wallet-list">
+                            <tbody id="tbody-list">
                             </tbody>
                         </table>
                     </div>
@@ -184,6 +158,22 @@
         <!-- Content End -->
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" id="modal-create">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="title">Create Wallet</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- JavaScript Libraries -->
@@ -198,70 +188,9 @@
     <script src="../../public/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="../../public/js/main.js"></script>
 </body>
 <script src="../.././public/lib1/moment.min.js"></script>
-<script>
-
-    const API_URL = 'http://localhost:3000';
-    let token = JSON.parse(localStorage.getItem('accessToken'));
-    if (!token) {
-        location.href = '../auth/signin.html'
-    }else{
-        $(function () {
-            showWalletList();
-        })
-    }
-    
-    function showWalletList(){
-        // $.ajax({
-        //     type: 'GET',
-        //     headers: {
-        //         'Authorization': 'Bearer ' + token.token
-        //     },
-        //     url: `${API_URL}/transaction`,
-        //     success: function(transaction){
-        //         for(let i = 0; i < transaction.length;i++){
-                    
-        //         }
-        //     }
-        // })
-        $.ajax({
-        type: 'GET',
-        headers: {
-            'Authorization': 'Bearer ' + token.token
-        },
-        url: `${API_URL}/wallets`,
-        success: function (data) {
-            let html = '';
-            let currentMoney = 0;
-            for (let i = 0; i < data.length; i++) {
-                currentMoney += data[i].totalMoney;
-                html += `<tr id=${data[i]._id}>
-                            <td>${i+1}</td>
-                            <td><image href="${API_URL}/${data[i].icon}"></td>
-                            <td>${data[i].name}</td>
-                            <td>${data[i].totalMoney}</td>
-                            <td>${currentMoney}</td>
-                            <td><button class="btn btn-sm btn-primary" onclick="detail("${data[i]._id}")">Detail</button></td>
-                        </tr>`
-                    }
-                    $('#wallet-list').html(html);
-        }
-        })
-    }
-    function detail(id){
-        
-    }
-
-    $(function () {
-        showTime();
-    })
-
-    function showTime() {
-        let time = moment().format('DD/MM/YYYY, h:mm A');
-        let html = `<span>${time}</span>`
-        $('#ViewTime').html(html);
-    }
-</script>
+<script src="../../public/js/category.js"></script>
+<script src="../../public/js/wallet.js"></script>
+<script src="../../public/js/main.js"></script>
 </html>
