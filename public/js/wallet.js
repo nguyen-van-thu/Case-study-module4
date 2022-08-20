@@ -78,7 +78,7 @@ function showCreateWalletForm(){
                 </div>
                 <div class="form-group">
                     <label for="icon">Icon</label>
-                    <input type="text" class="form-control" id="icon">
+                    <input type="file" class="form-control" id="icon">
                 </div>`
         $("#modal-body").html(html)
 }

@@ -1,4 +1,11 @@
 const API_URL = 'http://localhost:3000';
+
+function resetForm() {
+    $('#username').val('');
+    $('#password').val('');
+    $('#confirmPassword').val('');
+};
+
 function login() {
     let username = $('#username').val();
     let password = $('#password').val();
@@ -25,11 +32,6 @@ function login() {
         },
     })
 }
-function resetForm() {
-    $('#username').val('');
-    $('#password').val('');
-    $('#confirmPassword').val('');
-};
 
 function register() {
     let regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
@@ -54,7 +56,7 @@ function register() {
                         'Content-Type': 'application/json'
                     },
                     type: 'POST',
-                    url: `${URL}/register`,
+                    url: `${API_URL}/register`,
                     data: JSON.stringify(user),
                     success: async function () {
                         resetForm();
@@ -74,6 +76,7 @@ function register() {
         }
     }
 };
+
 (function ($) {
     "use strict";
 
