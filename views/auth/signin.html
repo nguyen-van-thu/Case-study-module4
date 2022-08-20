@@ -79,39 +79,8 @@
     <script src="../../public/lib/tempusdominus/js/moment.min.js"></script>
     <script src="../../public/lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="../../public/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-
     <!-- Template Javascript -->
-    <script src="../../public/js/main.js"></script>
-    <script>
-        const API_URL = 'http://localhost:3000';
-        let token = JSON.parse(localStorage.getItem('accessToken'));
-        function login() {
-            let username = $('#username').val();
-            let password = $('#password').val();
-            let user = {
-                username: username,
-                password: password
-            }
-            $.ajax({
-                type: 'POST',
-                url: `${API_URL}/login`,
-                data: JSON.stringify(user),
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                success: function (data) {
-                    console.log(data);
-                    location.href = '../user/index.html';
-                    localStorage.setItem('accessToken', JSON.stringify(data));
-                    if(data.role == "admin"){
-                        location.href = "../admin/index.html"
-                    }else if(data.role == "client"){
-                        location.href = "../user/index.html"
-                    }
-                },
-            })
-        }
-    </script>
+    <script src="../../public/js/auth.js"></script>
 </body>
 
 </html>

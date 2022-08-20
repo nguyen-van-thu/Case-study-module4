@@ -1,11 +1,79 @@
-let token = JSON.parse(localStorage.getItem('accessToken'));
 const API_URL = 'http://localhost:3000';
-if (!token) {
-    location.href = '../auth/signin.html'
+function login() {
+    let username = $('#username').val();
+    let password = $('#password').val();
+    let user = {
+        username: username,
+        password: password
+    }
+    $.ajax({
+        type: 'POST',
+        url: `${API_URL}/login`,
+        data: JSON.stringify(user),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        success: function (data) {
+            console.log(data);
+            location.href = '../user/index.html';
+            localStorage.setItem('accessToken', JSON.stringify(data));
+            if(data.role == "admin"){
+                location.href = "../admin/index.html"
+            }else if(data.role == "client"){
+                location.href = "../user/index.html"
+            }
+        },
+    })
 }
-function logOut() {
-    JSON.parse(localStorage.removeItem('accessToken'));
-}
+function resetForm() {
+    $('#username').val('');
+    $('#password').val('');
+    $('#confirmPassword').val('');
+};
+
+function register() {
+    let regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    let username = $('#username').val();
+    let password = $('#password').val();
+    let confirmPassword = $('#confirmPassword').val();
+
+    if (username === '' || password === '' || confirmPassword === ''){
+        Swal.fire('Bạn chưa nhập gì cả!')
+    }else {
+        if (!regexPassword.test(password)) {
+            $("#error-regex-password").replaceWith("Mật khẩu phải ít nhất 8 kí tự và ít nhất 1 số!");
+        }else {
+            if (password === confirmPassword) {
+                let user = {
+                    username: username,
+                    password: password,
+                };
+                $.ajax({
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    type: 'POST',
+                    url: `${URL}/register`,
+                    data: JSON.stringify(user),
+                    success: async function () {
+                        resetForm();
+                        await Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Sign up success!',
+                            showConfirmButton: false,
+                            timer: 2000
+                        })
+                        location.href = "signin.html"
+                    }
+                })
+            }else {
+                $("#error-check-password").replaceWith("Mật khẩu không trùng khớp");
+            }
+        }
+    }
+};
 (function ($) {
     "use strict";
 
