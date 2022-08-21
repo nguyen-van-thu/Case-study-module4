@@ -50,7 +50,7 @@ function showWalletList(){
             let currentMoney = data[i].totalMoney;
             html += `<tr id=${data[i]._id}>
                         <td>${i+1}</td>
-                        <td><image href="${API_URL}/${data[i].icon}"></td>
+                        <td><img src="${data[i].icon}" style = "width: 50px; height: 50px;"></td>
                         <td>${data[i].name}</td>
                         <td>${data[i].typeMoney}</td>
                         <td>${data[i].totalMoney}</td>
@@ -90,42 +90,65 @@ function showCreateWalletFooter() {
 }
 
 function createWallet(){
+    console.log(123);
     let name = $("#name").val();
     let typeMoney = $("#typeMoney").val();
     let totalMoney = $("#totalMoney").val();
-    let icon = $("#icon").val();
-    let wallet = {
-        name: name,
-        typeMoney: typeMoney,
-        totalMoney: totalMoney,
-        icon: icon
-    }
-    $.ajax({
-        type: "POST",
-        url: `${API_URL}/wallets`,
-        headers: {
-            "Content-Type": "Application/json",
-            "Authorization": "Bearer " + token.token
-        },
-        data: JSON.stringify(wallet),
-        success: function(data){
-            totalMoney++
-            let currentMoney = 0;
-            currentMoney = data.totalMoney;
-            totalWallet++;
-            let html = `<tr id=${data._id}>
-                        <td>${totalWallet}</td>
-                        <td><image href="${API_URL}/${data.icon}"></td>
-                        <td>${data.name}</td>
-                        <td>${data.typeMoney}</td>
-                        <td>${data.totalMoney}</td>
-                        <td>${currentMoney}</td>
-                        <td><button class="btn btn-sm btn-primary" onclick="detail("${data._id}")">Detail</button></td>
-                    </tr>`
-            $('#tbody-list').append(html);
-            resetFormCreateWallet();    
-        }
-    })
+    const firebaseConfig = {
+        apiKey: "AIzaSyCyeFbKhQleEyCE1PYyTVUOLwnKrTS5gK0",
+        authDomain: "bao2k-md4.firebaseapp.com",
+        projectId: "bao2k-md4",
+        storageBucket: "bao2k-md4.appspot.com",
+        messagingSenderId: "335141486798",
+        appId: "1:335141486798:web:298a6343a67f75d727909f",
+        measurementId: "G-E11R2YM4LB"
+      };
+       // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const ref = firebase.storage().ref();
+        const file = document.querySelector("#icon").files[0];
+        const nameImage = +new Date() + "-" + file.name;
+        const metadata = {
+        contentType: file.type
+        };
+        const task = ref.child(nameImage).put(file, metadata);
+        console.log(task);
+        task
+        .then(snapshot => snapshot.ref.getDownloadURL())
+        .then(url => {
+            let wallet = {
+                name: name,
+                typeMoney: typeMoney,
+                totalMoney: totalMoney,
+                icon: url
+            }
+            $.ajax({
+                type: "POST",
+                url: `${API_URL}/wallets`,
+                headers: {
+                    "Content-Type": "Application/json",
+                    "Authorization": "Bearer " + token.token
+                },
+                data: JSON.stringify(wallet),
+                success: function(data){
+                    totalMoney++
+                    let currentMoney = 0;
+                    currentMoney = data.totalMoney;
+                    totalWallet++;
+                    let html = `<tr id=${data._id}>
+                                <td>${totalWallet}</td>
+                                <td><img src="${data.icon}"style = "width: 50px; height: 50px;"></td>
+                                <td>${data.name}</td>
+                                <td>${data.typeMoney}</td>
+                                <td>${data.totalMoney}</td>
+                                <td>${currentMoney}</td>
+                                <td><button class="btn btn-sm btn-primary" onclick="detail("${data._id}")">Detail</button></td>
+                            </tr>`
+                    $('#tbody-list').append(html);
+                    resetFormCreateWallet();    
+                }
+            })
+        })
 }
 
 function detail(id){
