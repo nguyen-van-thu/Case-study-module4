@@ -114,7 +114,7 @@ function createCategory(){
                         <td>${data.name}</td>
                         <td>${data.description}</td>
                         <td>${data.type}</td>
-                        <td><button type="button" onclick="showCategoryUpdateForm('${data[i]._id}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <td><button type="button" onclick="showCategoryUpdateForm('${data._id}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Edit
                         </button></td>
                         <td><button type="button" class="btn btn-sm btn-primary" onclick="deleteCategory('${data._id}')">Delete</button></td>
@@ -130,9 +130,15 @@ function showCategoryUpdateForm(id) {
                 <button type="button" class="btn btn-primary" onclick="updateCategory('${id}')">Save</button>`;
     $('#modal-title').html('Update Category');
     $('#modal-footer').html(html);
-    getCategory(id);
+    getCategoryDetail(id);
 }
-function getCategory(id){
+
+function testAbc(){
+    console.log(123);
+}
+
+function getCategoryDetail(id){
+    console.log(123);
     $.ajax({
         type: "GET",
         url: `${API_URL}/categories/${id}`,
@@ -180,7 +186,7 @@ function updateCategory(id){
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Yes, update it!'
       }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
@@ -208,6 +214,7 @@ function updateCategory(id){
                         'category has been updated.',
                         'success'
                     )
+                    
                 }
             })      
         }
