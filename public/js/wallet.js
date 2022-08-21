@@ -31,7 +31,7 @@ function theadWallet(){
                         <th scope="col">Type Money</th>
                         <th scope="col">Total Money</th>
                         <th scope="col">Current Money</th>
-                        <th scope="col">Action</th>
+                        <th scope="col" colspan="2">Action</th>
                     </tr>`
     $("#thead-list").html(thWallet)
 }
@@ -56,6 +56,11 @@ function showWalletList(){
                         <td>${data[i].totalMoney}</td>
                         <td>${currentMoney}</td>
                         <td><button type="button" class="btn btn-sm btn-primary" onclick="detail("${data[i]._id}")">Detail</button></td>
+                        <td>
+                            <button type="button" onclick="showUpdateWalletForm(${data[i]._id})" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Update
+                            </button>  
+                        </td>
                     </tr>`
                 }
                 $('#tbody-list').html(html);
@@ -81,6 +86,27 @@ function showCreateWalletForm(){
                     <input type="file" class="form-control" id="icon">
                 </div>`
         $("#modal-body").html(html)
+}
+
+function showUpdateWalletForm(){
+    let html = `<div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name">
+            </div>
+            <div class="form-group">
+                <label for="price">Type Money</label>
+                <input type="text" class="form-control" id="typeFMoney">
+            </div>
+            <div class="form-group">
+                <label for="amount">Money</label>
+                <input type="text" class="form-control" id="totalMoney">
+            </div>
+            <div class="form-group">
+                <label for="icon">Icon</label>
+                <input type="file" class="form-control" id="icon">
+            </div>`
+            $("#title").html('Update wallet')
+            $("#modal-body").html(html)
 }
 
 function showCreateWalletFooter() {
