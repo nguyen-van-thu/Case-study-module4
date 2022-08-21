@@ -116,6 +116,7 @@ function showCreateWalletFooter() {
 }
 
 function createWallet(){
+    console.log(123);
     let name = $("#name").val();
     let typeMoney = $("#typeMoney").val();
     let totalMoney = $("#totalMoney").val();
@@ -137,6 +138,7 @@ function createWallet(){
         contentType: file.type
         };
         const task = ref.child(nameImage).put(file, metadata);
+        console.log(task);
         task
         .then(snapshot => snapshot.ref.getDownloadURL())
         .then(url => {

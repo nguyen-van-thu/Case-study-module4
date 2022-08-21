@@ -81,6 +81,14 @@
                 <form class="d-none d-md-flex ms-4">
                     <div id="ViewTime"></div>
                 </form>
+                <form class="d-none d-md-flex ms-4">
+                    <div id="button-create">
+                        <button type="button" onclick="showCreateTransactionForm()" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Create Transaction
+                        </button>
+                    </div>
+                </form>
+
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
@@ -169,7 +177,7 @@
         <div class="modal-dialog">
             <div class="modal-content" id="modal-create">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="title">Create Wallet</h5>
+                    <h5 class="modal-title" id="modal-title">Create Wallet</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modal-body">
@@ -190,11 +198,13 @@
     <script src="../../public/lib/tempusdominus/js/moment.min.js"></script>
     <script src="../../public/lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="../../public/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-
+    
     <!-- Template Javascript -->
 </body>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../.././public/lib1/moment.min.js"></script>
 <script src="../../public/js/category.js"></script>
 <script src="../../public/js/wallet.js"></script>
+<script src="../../public/js/transaction.js"></script>
 <script src="../../public/js/main.js"></script>
 </html>

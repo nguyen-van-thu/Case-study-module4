@@ -50,8 +50,10 @@ function showCategoryList(){
                         <td>${data[i].name}</td>
                         <td>${data[i].description}</td>
                         <td>${data[i].type}</td>
-                        <td><button type="button" class="btn btn-sm btn-primary" onclick="showCategoryUpdateForm('${data[i]._id}')">Edit</button></td>
-                        <td><button type="button" class="btn btn-sm btn-primary" onclick='deleteCategory('${data[i]._id}')'>Delete</button></td>
+                        <td><button type="button" onclick="showCategoryUpdateForm('${data[i]._id}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Edit
+                        </button></td>
+                        <td><button type="button" class="btn btn-sm btn-primary" onclick="deleteCategory('${data[i]._id}')">Delete</button></td>
                     </tr>`
                 }
                 $('#tbody-list').html(html);
@@ -112,26 +114,31 @@ function createCategory(){
                         <td>${data.name}</td>
                         <td>${data.description}</td>
                         <td>${data.type}</td>
-                        <td><button type="button" class="btn btn-sm btn-primary" onclick="showCategoryUpdateForm('${data._id}')">Edit</button></td>
+                        <td><button type="button" onclick="showCategoryUpdateForm('${data._id}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Edit
+                        </button></td>
                         <td><button type="button" class="btn btn-sm btn-primary" onclick="deleteCategory('${data._id}')">Delete</button></td>
                     </tr>`
             $('#tbody-list').append(html);
             resetFormCreateCategory();    
         }
     })
-    
 }
 
-// Các hàm dưới bị nhét trong hàm createCategory nên nó chỉ tồn tại trong cái hàm createCategory => lúc a gọi nó sẽ báo lỗi là hàm ko đc định nghĩa
 function showCategoryUpdateForm(id) {
-    console.log("Check");
     let html = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="updateCategory('${id}')">Save</button>`;
     $('#modal-title').html('Update Category');
     $('#modal-footer').html(html);
-    getCategory(id);
+    getCategoryDetail(id);
 }
-function getCategory(id){
+
+function testAbc(){
+    console.log(123);
+}
+
+function getCategoryDetail(id){
+    console.log(123);
     $.ajax({
         type: "GET",
         url: `${API_URL}/categories/${id}`,
@@ -159,12 +166,87 @@ function getCategory(id){
                         </div>
                         <br>`
             $("#modal-body").html(html)
-            
         }
     })
 }
 
-
 function updateCategory(id){
+    let name = $('#name').val();
+    let description = $('#description').val();
+    let type = $('#type').val();
+    let category = {
+        name: name,
+        description: description,
+        type: type
+    }
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, update it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: 'PUT',
+                url: `${API_URL}/categories/${id}`,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' +token.token
+                },
+                data: JSON.stringify(category),
+                success: function(data){
+                    let html = `<tr id="${data._id}">
+                                    <td>${totalCategory}</td>
+                                    <td>${data.name}</td>
+                                    <td>${data.description}</td>
+                                    <td>${data.type? data.type: ''}</td>
+                                    <td><button type="button" onclick="showCategoryUpdateForm('${data._id}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        Edit
+                                    </button></td>
+                                    <td><button type="button" class="btn btn-sm btn-primary" onclick="deleteCategory('${data._id}')">Delete</button></td>
+                                </tr>`
+                    $(`#${id}`).replaceWith(html);
+                    Swal.fire(
+                        'Updated!',
+                        'category has been updated.',
+                        'success'
+                    )
+                    
+                }
+            })      
+        }
+      })
+}
 
+function deleteCategory(id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: 'DELETE',
+                url: `${API_URL}/categories/${id}`,
+                headers: {
+                    'Authorization': 'Bearer ' +token.token
+                },
+                success: function () {
+                    Swal.fire(
+                        'Deleted!',
+                        'Category has been deleted.',
+                        'success'
+                    )
+                    $(`#${id}`).remove();
+                }
+            })
+        }
+      })
 }
