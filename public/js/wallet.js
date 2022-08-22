@@ -3,8 +3,6 @@ function showWallet(){
     headerTableWallet();
     theadWallet();
     showWalletList();
-    showCreateWalletForm();
-    showCreateWalletFooter();
 }
 function resetFormCreateWallet(){
     $("#name").val('');
@@ -37,6 +35,7 @@ function theadWallet(){
 }
 
 function showWalletList(){
+    let html = '';
     $.ajax({
     type: 'GET',
     headers: {
@@ -44,21 +43,33 @@ function showWalletList(){
     },
     url: `${API_URL}/wallets`,
     success: function (data) {
-        let html = '';
         for (let i = 0; i < data.length; i++) {
-            totalWallet++
-            let currentMoney = data[i].totalMoney;
-            html += `<tr id=${data[i]._id}>
-                        <td>${i+1}</td>
-                        <td><img src="${data[i].icon}" style = "width: 50px; height: 50px;"></td>
-                        <td>${data[i].name}</td>
-                        <td>${data[i].typeMoney}</td>
-                        <td>${data[i].totalMoney}</td>
-                        <td>${currentMoney}</td>
-                        <td><button type="button" class="btn btn-sm btn-primary" onclick="detail("${data[i]._id}")">Detail</button></td>
-                    </tr>`
-                }
+            totalWallet++;
+            $.ajax({
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token.token
+                },
+                url: `${API_URL}/transaction/${data[i]._id}`,
+                success: function(dataTransaction){
+                    let currentMoney = 0;
+                    for(let j = 0; j < dataTransaction.length; j++){
+                        currentMoney += dataTransaction[j].money
+                    }
+                currentMoney += data[i].totalMoney;
+                html += `<tr id=${data[i]._id}>
+                    <td>${i+1}</td>
+                    <td><img src="${data[i].icon}" style = "width: 50px; height: 50px;"></td>
+                    <td>${data[i].name}</td>
+                    <td>${data[i].typeMoney}</td>
+                    <td>${data[i].totalMoney}</td>
+                    <td>${currentMoney}</td>
+                    <td><button type="button" class="btn btn-sm btn-primary" onclick="detail("${data[i]._id}")">Detail</button></td>
+                </tr>`
                 $('#tbody-list').html(html);
+                }
+            })
+            }
     }
     })
 }
@@ -81,12 +92,9 @@ function showCreateWalletForm(){
                     <input type="file" class="form-control" id="icon">
                 </div>`
         $("#modal-body").html(html)
-}
-
-function showCreateWalletFooter() {
-    let html = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        let htmlFooter = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="createWallet()">Create</button>`;
-    $("#modal-footer").html(html)
+    $("#modal-footer").html(htmlFooter);
 }
 
 function createWallet(){
@@ -164,3 +172,4 @@ function showTime() {
     let html = `<span>${time}</span>`
     $('#ViewTime').html(html);
 }
+

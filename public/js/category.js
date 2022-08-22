@@ -64,9 +64,6 @@ function showCategoryList(){
             htmlPage += `<button type="button" onclick="showPageCategory(${page})">${page}</button>`
         }
         $('#page-footer').html(htmlPage);
-    }
-    })
-}
 
 function showPageCategory(page){
     $.ajax({
@@ -167,10 +164,6 @@ function showCategoryUpdateForm(id) {
     $('#modal-title').html('Update Category');
     $('#modal-footer').html(html);
     getCategoryDetail(id);
-}
-
-function testAbc(){
-    console.log(123);
 }
 
 function getCategoryDetail(id){
