@@ -3,7 +3,6 @@ function showWallet(){
     headerTableWallet();
     theadWallet();
     showWalletList();
-    showCreateWalletForm();
     showCreateWalletFooter();
 }
 function resetFormCreateWallet(){
@@ -55,9 +54,9 @@ function showWalletList(){
                         <td>${data[i].typeMoney}</td>
                         <td>${data[i].totalMoney}</td>
                         <td>${currentMoney}</td>
-                        <td><button type="button" class="btn btn-sm btn-primary" onclick="detail("${data[i]._id}")">Detail</button></td>
+                        <td><button type="button" class="btn btn-sm btn-primary" onclick="detail('${data[i]._id}')">Detail</button></td>
                         <td>
-                            <button type="button" onclick="showUpdateWalletForm(${data[i]._id})" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <button type="button" onclick="showUpdateWalletForm('${data[i]._id}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Update
                             </button>  
                         </td>
@@ -86,27 +85,31 @@ function showCreateWalletForm(){
                     <input type="file" class="form-control" id="icon">
                 </div>`
         $("#modal-body").html(html)
+        $("#modal-title").html("Create wallet");
 }
 
-function showUpdateWalletForm(){
+function showUpdateWalletForm(id){
     let html = `<div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" id="name">
-            </div>
-            <div class="form-group">
-                <label for="price">Type Money</label>
-                <input type="text" class="form-control" id="typeFMoney">
-            </div>
-            <div class="form-group">
-                <label for="amount">Money</label>
-                <input type="text" class="form-control" id="totalMoney">
-            </div>
-            <div class="form-group">
-                <label for="icon">Icon</label>
-                <input type="file" class="form-control" id="icon">
-            </div>`
-            $("#title").html('Update wallet')
-            $("#modal-body").html(html)
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name">
+                </div>
+                <div class="form-group">
+                    <label for="price">Type Money</label>
+                    <input type="text" class="form-control" id="typeMoney">
+                </div>
+                <div class="form-group">
+                    <label for="amount">Money</label>
+                    <input type="text" class="form-control" id="totalMoney">
+                </div>
+                <div class="form-group">
+                    <label for="icon">Icon</label>
+                    <input type="file" class="form-control" id="icon">
+                </div>`
+    let htmlButton = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <button type="button" class="btn btn-primary" onclick="updateWallet('${id}')">Update</button>`;
+    $("#modal-body").html(html)
+    $("#modal-footer").html(htmlButton);
+    $("#modal-title").html('Update wallet');
 }
 
 function showCreateWalletFooter() {
