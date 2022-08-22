@@ -55,7 +55,7 @@ function showWalletList(){
                         <td>${data[i].typeMoney}</td>
                         <td>${data[i].totalMoney}</td>
                         <td>${currentMoney}</td>
-                        <td><button type="button" class="btn btn-sm btn-primary" onclick="detail("${data[i]._id}")">Detail</button></td>
+                        <td><button type="button" onclick="showDetailWallet('${data[i]._id}')" class="btn btn-primary">Detaid</button></td>
                     </tr>`
                 }
                 $('#tbody-list').html(html);
@@ -164,3 +164,4 @@ function showTime() {
     let html = `<span>${time}</span>`
     $('#ViewTime').html(html);
 }
+

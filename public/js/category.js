@@ -60,6 +60,7 @@ function showCategoryList(){
     }
     })
 }
+
 function showCreateCategoryForm(){
     let html = `<div class="form-group">
                     <label for="name">Name</label>
