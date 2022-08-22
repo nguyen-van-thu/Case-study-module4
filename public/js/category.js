@@ -15,6 +15,7 @@ function resetFormCreateCategory(){
 
 function headerTableCategory(){
     let html = `<h6 class="mb-0" id="title">Category List</h6>
+                <div id="page-footer"></div>
                 <div id="button-create">
                     <button type="button" onclick="showCreateCategoryForm()" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         Create new category
@@ -42,24 +43,58 @@ function showCategoryList(){
     },
     url: `${API_URL}/categories`,
     success: function (data) {
-        let html = '';
-        for (let i = 0; i < data.length; i++) {
+        let htmlList = '';
+        let htmlPage = '';
+        for (let i = 0; i < data.categories.length; i++) {
             totalCategory++
-            html += `<tr id=${data[i]._id}>
+            htmlList += `<tr id=${data.categories[i]._id}>
                         <td>${i+1}</td>
-                        <td>${data[i].name}</td>
-                        <td>${data[i].description}</td>
-                        <td>${data[i].type}</td>
-                        <td><button type="button" onclick="showCategoryUpdateForm('${data[i]._id}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <td>${data.categories[i].name}</td>
+                        <td>${data.categories[i].description}</td>
+                        <td>${data.categories[i].type}</td>
+                        <td><button type="button" onclick="showCategoryUpdateForm('${data.categories[i]._id}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Edit
                         </button></td>
-                        <td><button type="button" class="btn btn-sm btn-primary" onclick="deleteCategory('${data[i]._id}')">Delete</button></td>
+                        <td><button type="button" class="btn btn-sm btn-primary" onclick="deleteCategory('${data.categories[i]._id}')">Delete</button></td>
                     </tr>`
                 }
-                $('#tbody-list').html(html);
+                $('#tbody-list').html(htmlList);
+                console.log(data.totalPage);
+        for(let page = 1; page < data.totalPage; page++){
+            htmlPage += `<button type="button" onclick="showPageCategory(${page})">${page}</button>`
+        }
+        $('#page-footer').html(htmlPage);
     }
     })
 }
+
+function showPageCategory(page){
+    $.ajax({
+    type: 'GET',
+    headers: {
+        'Authorization': 'Bearer ' + token.token
+    },
+    url: `${API_URL}/categories?page=${page}`,
+    success: function (data) {
+        let htmlList = '';
+        for (let i = 0; i < data.categories.length; i++) {
+            totalCategory++
+            htmlList += `<tr id=${data.categories[i]._id}>
+                        <td>${i+1}</td>
+                        <td>${data.categories[i].name}</td>
+                        <td>${data.categories[i].description}</td>
+                        <td>${data.categories[i].type}</td>
+                        <td><button type="button" onclick="showCategoryUpdateForm('${data.categories[i]._id}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Edit
+                        </button></td>
+                        <td><button type="button" class="btn btn-sm btn-primary" onclick="deleteCategory('${data.categories[i]._id}')">Delete</button></td>
+                    </tr>`
+                }
+                $('#tbody-list').html(htmlList);
+    }
+    })
+}
+
 function showCreateCategoryForm(){
     let html = `<div class="form-group">
                     <label for="name">Name</label>
@@ -80,7 +115,8 @@ function showCreateCategoryForm(){
                     </select>
                 </div>
                 <br>`
-        $("#modal-body").html(html)
+        $("#modal-body").html(html);
+        $("#modal-title").html("Create category");
 }
 
 function showCreateCategoryFooter() {
@@ -214,7 +250,6 @@ function updateCategory(id){
                         'category has been updated.',
                         'success'
                     )
-                    
                 }
             })      
         }
