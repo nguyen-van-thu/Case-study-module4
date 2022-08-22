@@ -1,0 +1,7 @@
+{
+  "name": "case-4-FE-4",
+  "version": "1.0.0",
+  "dependencies": {
+    "mongoose": "^6.5.2"
+  }
+}
