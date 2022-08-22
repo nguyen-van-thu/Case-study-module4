@@ -5,6 +5,8 @@ function showCreateTransactionForm() {
     getCategory();
 }
 
+
+
 function showModalCreateTransaction() {
     let now = moment().format('YYYY-MM-DD');
     let html = `<div class="form-group">

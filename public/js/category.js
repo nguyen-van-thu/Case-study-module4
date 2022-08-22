@@ -59,7 +59,6 @@ function showCategoryList(){
                     </tr>`
                 }
                 $('#tbody-list').html(htmlList);
-                console.log(data.totalPage);
         for(let page = 1; page < data.totalPage; page++){
             htmlPage += `<button type="button" onclick="showPageCategory(${page})">${page}</button>`
         }
@@ -169,12 +168,7 @@ function showCategoryUpdateForm(id) {
     getCategoryDetail(id);
 }
 
-function testAbc(){
-    console.log(123);
-}
-
 function getCategoryDetail(id){
-    console.log(123);
     $.ajax({
         type: "GET",
         url: `${API_URL}/categories/${id}`,
