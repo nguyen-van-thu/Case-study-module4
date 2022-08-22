@@ -64,9 +64,6 @@ function showCategoryList(){
             htmlPage += `<button type="button" onclick="showPageCategory(${page})">${page}</button>`
         }
         $('#page-footer').html(htmlPage);
-    }
-    })
-}
 
 function showPageCategory(page){
     $.ajax({
