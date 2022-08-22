@@ -169,10 +169,6 @@ function showCategoryUpdateForm(id) {
     getCategoryDetail(id);
 }
 
-function testAbc(){
-    console.log(123);
-}
-
 function getCategoryDetail(id){
     console.log(123);
     $.ajax({
