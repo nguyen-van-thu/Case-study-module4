@@ -24,12 +24,16 @@ function login() {
             console.log(data);
             location.href = '../user/index.html';
             localStorage.setItem('accessToken', JSON.stringify(data));
-            if(data.role == "admin"){
+            if(data.role === "admin"){
                 location.href = "../admin/index.html"
-            }else if(data.role == "client"){
+            }else if(data.role === "client"){
                 location.href = "../user/index.html"
             }
         },
+        error: function () {
+            console.log(123);
+            Swal.fire('Tài khoản hoặc mật khẩu sai!');
+        }
     })
 }
 
