@@ -126,7 +126,7 @@ function fetchData() {
                              <td>${currentMoney}</td>
                              <td><button type="button" class="btn btn-sm btn-primary" onclick="detail('${data._id}')">Detail</button></td>
                              <td>
-                                 <button type="button" onclick="showUpdateWalletForm('${data._id}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                 <button type="button" onclick="showUpdateWalletForm('${data._id}', ${i - 1})" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                  Update
                                  </button>  
                              </td>
@@ -191,9 +191,9 @@ function showCreateWalletForm(){
         showCreateWalletFooter();
 }
 
-function showUpdateWalletForm(id) {
+function showUpdateWalletForm(id, index) {
     let htmlFooter = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="updateWallet('${id}')">Update</button>`;
+                <button type="button" class="btn btn-primary" onclick="updateWallet('${id}', ${index})">Update</button>`;
     $('#modal-title').html('Update Wallet');
     $('#modal-footer').html(htmlFooter);
     getWalletDetail(id)
@@ -228,7 +228,7 @@ function getWalletDetail(id){
     })
 }
 
-function updateWallet(id){
+function updateWallet(id, index){
     let name = $('#name').val();
     let typeMoney = $('#typeMoney').val();
     let totalMoney = $('#totalMoney').val();
@@ -283,7 +283,7 @@ function updateWallet(id){
                             let currentMoney = 0;
                             currentMoney = data.totalMoney;
                             let html = `<tr id="${data._id}">
-                                            <td>${totalWallet}</td>
+                                            <td>${index}</td>
                                             <td><img src="${data.icon}"style = "width: 50px; height: 50px;"></td>
                                             <td>${data.name}</td>
                                             <td>${data.typeMoney}</td>
@@ -291,7 +291,7 @@ function updateWallet(id){
                                             <td>${currentMoney}</td>
                                             <td><button class="btn btn-sm btn-primary" onclick="detail("${data._id}")">Detail</button></td>
                                             <td>
-                                            <button type="button" onclick="showUpdateWalletForm('${data._id}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                            <button type="button" onclick="showUpdateWalletForm('${data._id}', ${index})" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                             Update
                                             </button>  
                                             </td
@@ -338,6 +338,7 @@ function createWallet(){
         const nameImage = +new Date() + "-" + file.name;
         const metadata = {
         contentType: file.type
+        
         };
         const task = ref.child(nameImage).put(file, metadata);
         console.log(task);
